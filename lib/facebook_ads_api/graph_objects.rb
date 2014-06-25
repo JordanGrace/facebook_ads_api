@@ -58,6 +58,16 @@ module FacebookAdsApi
       "<#{self.class} @path=#{@path}>"
     end
 
+    def to_hash
+      hash = {}
+
+      self.singleton_methods.each do |method|
+        hash[method] = self.send method
+      end
+
+      hash
+    end
+
     protected
 
     ##
