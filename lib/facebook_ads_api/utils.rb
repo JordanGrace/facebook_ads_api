@@ -3,7 +3,15 @@ module FacebookAdsApi
     ##
     #
     def url_encode(hash)
-      hash.to_a.map{ |a| a.map.with_index { |b,i| i.eql?(1) ? MultiJson.dump(b) : b }.join '=' }.join '&'
+      hash.to_a.map do |a| 
+        a.map.with_index do |b,i| 
+          if i.eql?(1) && !b.is_a?(String)
+            MultiJson.dump(b)
+          else
+            b
+          end 
+        end.join '='
+      end.join '&'
     end
 
     ##
