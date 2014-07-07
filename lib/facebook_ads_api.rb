@@ -8,6 +8,7 @@ module FacebookAdsApi
 
   require 'facebook_ads_api/utils'
   require 'facebook_ads_api/errors'
+  require 'facebook_ads_api/graph_object'
   require 'facebook_ads_api/graph_objects'
 
   require 'facebook_ads_api/client'
