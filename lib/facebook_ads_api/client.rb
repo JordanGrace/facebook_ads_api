@@ -1,12 +1,17 @@
 module FacebookAdsApi
+  ##
+  # Client: This class contains all the necessary logic to handle the communication to
+  # Facebook's Graph API.  Currently the Client class requires you to pass an access
+  # token obtained from facebook.  An Oauth authentication solution is not currently 
+  # implemented. 
   class Client
     include Utils
 
     ##
     # DEFAULTS: Setting a default configuration.  By default facebook graph api will be
-    # defaulted to the latest version.  Also SSL will always be used, in fact it is kind of pointless
-    # to make in an overridable option because facebook requires you to use https when sending
-    # access_tokens.
+    # defaulted to the latest version availble at the team of a version release.  Also SSL 
+    # will always be used, in fact it is kind of pointless to make in an overridable option 
+    # because facebook requires you to use https when sending access_tokens.
     #
     # todos: Change ssl_verify_peer back to true and include cacert.pem.
     DEFAULTS = {
@@ -67,7 +72,7 @@ module FacebookAdsApi
         # Use url_encode Utils method to convert parameters into something the request
         # can append to path.
         path << "&#{url_encode(params)}" unless params.empty? 
-
+ 
         # Created a new Net::HTTP Get request.
         request = method_class.new path
 
