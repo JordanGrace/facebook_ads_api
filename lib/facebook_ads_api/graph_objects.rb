@@ -2,6 +2,8 @@ module FacebookAdsApi
   ##
   #
   class GraphObjects
+    include Utils
+
     ##
     #
     def initialize(path, client, params={})
@@ -26,6 +28,33 @@ module FacebookAdsApi
         @instance_class.new "#{@path.split('?').first}/#{resource['adgroup_id']}", @client, resource
       end
 
+      client, list_class = @client, self.class
+      resource_list.instance_eval do 
+        tmpclass = class << self; include Utils; self; end
+
+        tmpclass.send :define_method, :next_page, &lambda{
+          if response.has_key?("paging") and response["paging"].has_key?("next")
+            page_path = response["paging"]["next"].split("?").first
+            page_params = url_unpack(response["paging"]["next"].split("?").last).delete_if{ |k,v| k.eql?(:access_token) }
+
+            list_class.new(page_path,client).list(page_params)
+          else
+            []
+          end
+        }
+
+        tmpclass.send :define_method, :previous_page, &lambda{
+          if response.has_key?("paging") and response["paging"].has_key?("previous")
+            page_path = response["paging"]["previous"].split("?").first
+            page_params = url_unpack(response["paging"]["previous"].split("?").last).delete_if{ |k,v| k.eql?(:access_token) }
+
+            list_class.new(page_path,client).list(page_params)
+          else
+            []
+          end
+        }
+      end
+
       resource_list
     end
 
@@ -39,59 +68,6 @@ module FacebookAdsApi
     #
     def inspect
       "<#{self.class} @path=#{@path}>"
-    end
-  end
-
-  class GraphObject
-    include Utils
-
-    ##
-    #
-    def initialize(path, client, params={})
-      @path, @client = path, client
-      setup_properties params
-    end
-
-    ##
-    #
-    def inspect
-      "<#{self.class} @path=#{@path}>"
-    end
-
-    def to_hash
-      hash = {}
-
-      self.singleton_methods.each do |method|
-        hash[method] = self.send method
-      end
-
-      hash
-    end
-
-    protected
-
-    ##
-    #
-    def resource(*resources)
-      resources.each do |r|
-        resource = resourceify r
-        path = "#{@path}/#{resource.downcase}"
-        enclosed_module = @sub_module == nil ? (FacebookAdsApi) : (FacebookAdsApi.const_get(@sub_module))
-        resource_class = enclosed_module.const_get resource
-        instance_variable_set("@#{r}", resource_class.new(path, @client))
-      end
-
-      self.class.instance_eval { attr_reader *resources }
-    end
-
-    ##
-    #
-    def setup_properties(hash)
-      tmpclass = class << self; self; end
-
-      hash.each do |key,val|
-        tmpclass.send :define_method, key.to_sym, &lambda {val}
-      end
     end
   end
 end
