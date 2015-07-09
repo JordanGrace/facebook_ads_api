@@ -2,21 +2,21 @@ module FacebookAdsApi
   ##
   # Client: This class contains all the necessary logic to handle the communication to
   # Facebook's Graph API.  Currently the Client class requires you to pass an access
-  # token obtained from facebook.  An Oauth authentication solution is not currently 
-  # implemented. 
+  # token obtained from facebook.  An Oauth authentication solution is not currently
+  # implemented.
   class Client
     include Utils
 
     ##
     # DEFAULTS: Setting a default configuration.  By default facebook graph api will be
-    # defaulted to the latest version availble at the team of a version release.  Also SSL 
-    # will always be used, in fact it is kind of pointless to make in an overridable option 
+    # defaulted to the latest version availble at the team of a version release.  Also SSL
+    # will always be used, in fact it is kind of pointless to make in an overridable option
     # because facebook requires you to use https when sending access_tokens.
     #
     # todos: Change ssl_verify_peer back to true and include cacert.pem.
     DEFAULTS = {
       host: "graph.facebook.com",
-      api_version: "v2.2",
+      api_version: "v2.4",
       port: 443,
       use_ssl: true,
       ssl_verify_peer: false,
@@ -33,11 +33,11 @@ module FacebookAdsApi
     attr_reader :access_token, :accounts
 
     ##
-    # intitalize: Accepts an non-optional access_token and a optional options hash.  
-    # There are currently no stratgies for handling OAuth communication, between 
-    # the gem and facebook, that are implemented.  access_token will need to be 
-    # retrieved outside of the gem in the users implementation. The method 
-    # creates @access_token and @config instance variables and calls 
+    # intitalize: Accepts an non-optional access_token and a optional options hash.
+    # There are currently no stratgies for handling OAuth communication, between
+    # the gem and facebook, that are implemented.  access_token will need to be
+    # retrieved outside of the gem in the users implementation. The method
+    # creates @access_token and @config instance variables and calls
     # setup_connection and setup_resource methods to create an instance of Net::HTTP
     # and instance of the Accounts class.
     def initialize(access_token, options={})
@@ -55,7 +55,7 @@ module FacebookAdsApi
     end
 
     ##
-    # Dynamically define methods for types of HTTP requests.  Currently only :get 
+    # Dynamically define methods for types of HTTP requests.  Currently only :get
     # requests are implemented and other requests will be added as functionality is completed.
     # Each type of HTTP request is uses the same logic below.
     [:get].each do |method|
@@ -64,15 +64,15 @@ module FacebookAdsApi
 
       # Defining each method with path and params parameters.
       define_method method do |path, params|
-        params = {} if params.empty? 
+        params = {} if params.empty?
 
         # Add access_token obtained from facebook to path.
-        path << "?access_token=#{@access_token}" 
+        path << "?access_token=#{@access_token}"
 
         # Use url_encode Utils method to convert parameters into something the request
         # can append to path.
-        path << "&#{url_encode(params)}" unless params.empty? 
- 
+        path << "&#{url_encode(params)}" unless params.empty?
+
         # Created a new Net::HTTP Get request.
         request = method_class.new path
 
@@ -85,11 +85,11 @@ module FacebookAdsApi
     private
 
     ##
-    # setup_connection: Setup a new Net::HTTP connection and assigns it to the 
+    # setup_connection: Setup a new Net::HTTP connection and assigns it to the
     # @connection instance variable.
     def setup_connection
       # Incase a proxy is desired.
-      connection = Net::HTTP::Proxy @config[:proxy_addess], @config[:proxy_port], 
+      connection = Net::HTTP::Proxy @config[:proxy_addess], @config[:proxy_port],
         @config[:proxy_user], @config[:proxy_address]
 
       # Create a new connection with graph.facebook.com host.
@@ -154,7 +154,7 @@ module FacebookAdsApi
     end
 
     ##
-    # parse_response: Accepts a non-optional response and uses MultiJson to 
+    # parse_response: Accepts a non-optional response and uses MultiJson to
     # unpack it into a useable hash.
     def parse_response(response)
       object = nil
