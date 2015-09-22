@@ -1,15 +1,15 @@
 module FacebookAdsApi
   ##
   # Accounts: Inherits from GraphObjects class.  This class remains unfinished
-  # due to the lack of ads_manage permissions access to the Ads API.  
-  class Accounts < GraphObjects 
+  # due to the lack of ads_manage permissions access to the Ads API.
+  class Accounts < GraphObjects
     ##
     # initlaize: Accepts a non optional path, client, and optional params hash.
     # path is the string representation that is used to build the path used in a
     # communication to the Facebook API.  Client a current instatance of the Client
     # class.  Params allows the passing of filters provided by the Facebook API
     # such as time_ranges.
-    def initialize(path, client, params={})      
+    def initialize(path, client, params={})
       super path, client, params
     end
   end
@@ -27,7 +27,7 @@ module FacebookAdsApi
     def initialize(path, client, params={})
       super fix_path(path), client, params
 
-      resource :report_stats
+      resource :insights
     end
 
     private
