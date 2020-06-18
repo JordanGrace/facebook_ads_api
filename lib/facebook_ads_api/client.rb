@@ -16,7 +16,7 @@ module FacebookAdsApi
     # todos: Change ssl_verify_peer back to true and include cacert.pem.
     DEFAULTS = {
       host: "graph.facebook.com",
-      api_version: "v5.0",
+      api_version: "v6.0",
       port: 443,
       use_ssl: true,
       ssl_verify_peer: false,
