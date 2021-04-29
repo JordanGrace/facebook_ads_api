@@ -14,6 +14,6 @@ module FacebookAdsApi
   require 'facebook_ads_api/client'
   require 'facebook_ads_api/accounts'
   require 'facebook_ads_api/accounts/insights'
-  require 'facebook_ads_api/campaigns'
-  require 'facebook_ads_api/campaigns/insights'
+  # require 'facebook_ads_api/campaigns'
+  # require 'facebook_ads_api/campaigns/insights'
 end

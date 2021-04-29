@@ -40,6 +40,7 @@ module FacebookAdsApi
     # method ensures the prefix is added to it's path.
     def fix_path(path)
       path_segments = path.split("/")
+      p path_segments
       "/" + path_segments[1] + "/act_" + path_segments[2]
     end
   end
