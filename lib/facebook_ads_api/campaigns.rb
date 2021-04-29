@@ -10,6 +10,7 @@ module FacebookAdsApi
     # class.  Params allows the passing of filters provided by the Facebook API
     # such as time_ranges.
     def initialize(path, client, params={})
+      p 'Campaigns'
       super path, client, params
     end
   end
@@ -25,6 +26,7 @@ module FacebookAdsApi
     # class.  Params allows the passing of filters provided by the Facebook API
     # such as time_ranges.  report_stats resource is also intialized.
     def initialize(path, client, params={})
+      p 'Campaign'
       super fix_path(path), client, params
 
       resource :insights
